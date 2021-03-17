@@ -1,0 +1,8 @@
+{
+    "startpage": "Start page",
+    "@startpage": {
+      "description": "第一頁/標題",
+      "type": "text",
+      "placeholders": {}
+    }
+}
