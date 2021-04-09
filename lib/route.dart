@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:mvvm_expample/second_page.dart';
+import 'package:mvvm_expample/second/second_page.dart';
 import 'package:mvvm_expample/splash_page.dart';
 
 enum TransitionType { normal, slideTop, slideLeft }
