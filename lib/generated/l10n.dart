@@ -47,12 +47,112 @@ class MvvmApp {
     return Localizations.of<MvvmApp>(context, MvvmApp);
   }
 
-  /// `第一頁`
-  String get startpage {
+  /// `營運時間:`
+  String get operatingHours {
     return Intl.message(
-      '第一頁',
-      name: 'startpage',
-      desc: '第一頁/標題',
+      '營運時間:',
+      name: 'operatingHours',
+      desc: '停車場資訊/營運時間:',
+      args: [],
+    );
+  }
+
+  /// `停車場資訊`
+  String get parkingLotInformation {
+    return Intl.message(
+      '停車場資訊',
+      name: 'parkingLotInformation',
+      desc: '停車場資訊/停車場資訊',
+      args: [],
+    );
+  }
+
+  /// `平日收費方式`
+  String get weekdays {
+    return Intl.message(
+      '平日收費方式',
+      name: 'weekdays',
+      desc: '停車場資訊/平日收費方式',
+      args: [],
+    );
+  }
+
+  /// `假日收費方式`
+  String get holiday {
+    return Intl.message(
+      '假日收費方式',
+      name: 'holiday',
+      desc: '停車場資訊/假日收費方式',
+      args: [],
+    );
+  }
+
+  /// `汽車總車位:`
+  String get totalCar {
+    return Intl.message(
+      '汽車總車位:',
+      name: 'totalCar',
+      desc: '停車場資訊/汽車總車位:',
+      args: [],
+    );
+  }
+
+  /// `汽車剩餘車位:`
+  String get carRemaining {
+    return Intl.message(
+      '汽車剩餘車位:',
+      name: 'carRemaining',
+      desc: '停車場資訊/汽車剩餘車位:',
+      args: [],
+    );
+  }
+
+  /// `機車總車位:`
+  String get totalLocomotive {
+    return Intl.message(
+      '機車總車位:',
+      name: 'totalLocomotive',
+      desc: '停車場資訊/機車總車位:',
+      args: [],
+    );
+  }
+
+  /// `機車剩餘車位:`
+  String get locomotiveRemaining {
+    return Intl.message(
+      '機車剩餘車位:',
+      name: 'locomotiveRemaining',
+      desc: '停車場資訊/機車剩餘車位:',
+      args: [],
+    );
+  }
+
+  /// `交通資訊`
+  String get trafficInformation {
+    return Intl.message(
+      '交通資訊',
+      name: 'trafficInformation',
+      desc: '側邊欄/交通資訊',
+      args: [],
+    );
+  }
+
+  /// `地圖`
+  String get drawerMap {
+    return Intl.message(
+      '地圖',
+      name: 'drawerMap',
+      desc: '側邊欄/地圖',
+      args: [],
+    );
+  }
+
+  /// `列表`
+  String get drawerList {
+    return Intl.message(
+      '列表',
+      name: 'drawerList',
+      desc: '側邊欄/列表',
       args: [],
     );
   }

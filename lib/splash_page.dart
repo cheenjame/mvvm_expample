@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:mvvm_expample/generated/l10n.dart';
 import 'package:mvvm_expample/route.dart';
+import 'package:mvvm_expample/splash_view_model.dart';
 
 class SplashPage extends StatelessWidget {
+  SplashPage({SplashViewModel? viewModel})
+      : _viewModel = viewModel ?? SplashViewModel();
+  final SplashViewModel _viewModel;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title:  Text(MvvmApp.of(context).startpage),
-      ),
-      body: Center(
-          child: Column(
-        children: [
-          ElevatedButton(
-              child: const Text('點擊'),
-              onPressed: () => Navigator.pushNamed(context, kRouteFirst))
-        ],
-      )),
-    );
+    return FutureBuilder(
+        future: _viewModel.getTime(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            WidgetsBinding.instance?.addPostFrameCallback((_) {
+              Navigator.popAndPushNamed(context, kRouteParking);
+            });
+          }
+          return Container(
+            alignment: Alignment.center,
+            color: Colors.white,
+            child: const Icon(Icons.car_repair),
+          );
+        });
   }
 }

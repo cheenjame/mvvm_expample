@@ -21,6 +21,16 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
-    "startpage" : MessageLookupByLibrary.simpleMessage("第一頁")
+    "carRemaining" : MessageLookupByLibrary.simpleMessage("汽車剩餘車位:"),
+    "drawerList" : MessageLookupByLibrary.simpleMessage("列表"),
+    "drawerMap" : MessageLookupByLibrary.simpleMessage("地圖"),
+    "holiday" : MessageLookupByLibrary.simpleMessage("假日收費方式"),
+    "locomotiveRemaining" : MessageLookupByLibrary.simpleMessage("機車剩餘車位:"),
+    "operatingHours" : MessageLookupByLibrary.simpleMessage("營運時間:"),
+    "parkingLotInformation" : MessageLookupByLibrary.simpleMessage("停車場資訊"),
+    "totalCar" : MessageLookupByLibrary.simpleMessage("汽車總車位:"),
+    "totalLocomotive" : MessageLookupByLibrary.simpleMessage("機車總車位:"),
+    "trafficInformation" : MessageLookupByLibrary.simpleMessage("交通資訊"),
+    "weekdays" : MessageLookupByLibrary.simpleMessage("平日收費方式")
   };
 }
