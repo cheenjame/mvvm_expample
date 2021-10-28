@@ -51,24 +51,28 @@ class _ParkingState extends State<ParkingPage> {
         title: Text(MvvmApp.of(context).parkingLotInformation),
       ),
       drawer: MvvmDrawer(),
-      body: Column(children: [
-        _buildSearchTextField(),
-        Expanded(
-          child: ChangeNotifierProvider.value(
-              value: _viewModel.items,
-              child: RefreshIndicator(
-                key: _refreshKey,
-                child: Consumer<ValueNotifier<List<HsinchuCityParking>>>(
-                  builder: (context, items, child) => ListView.separated(
-                      itemBuilder: (BuildContext context, int index) =>
-                          _buildParkingItem(context, items.value[index]),
-                      separatorBuilder: (context, int index) => const Divider(),
-                      itemCount: items.value.length),
-                ),
-                onRefresh: _viewModel.getHsinchuParking,
-              )),
-        )
-      ]),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Column(children: [
+          _buildSearchTextField(),
+          Expanded(
+            child: ChangeNotifierProvider.value(
+                value: _viewModel.items,
+                child: RefreshIndicator(
+                  key: _refreshKey,
+                  child: Consumer<ValueNotifier<List<HsinchuCityParking>>>(
+                    builder: (context, items, child) => ListView.separated(
+                        itemBuilder: (BuildContext context, int index) =>
+                            _buildParkingItem(context, items.value[index]),
+                        separatorBuilder: (context, int index) =>
+                            const Divider(),
+                        itemCount: items.value.length),
+                  ),
+                  onRefresh: _viewModel.getHsinchuParking,
+                )),
+          )
+        ]),
+      ),
     );
   }
 
@@ -173,7 +177,7 @@ class _ParkingState extends State<ParkingPage> {
     );
   }
 
-/// 車位資訊
+  /// 車位資訊
   Widget _buildParkingSpace(String totalTitle, String numberTitle, String total,
       String locomotiveSurplus) {
     if (_viewModel.isTotal(total)) {
