@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:mvvm_expample/colors.dart';
 import 'package:mvvm_expample/generated/l10n.dart';
 import 'package:mvvm_expample/route.dart';
@@ -19,7 +18,10 @@ class MvvmDrawer extends StatelessWidget {
           ),
           decoration: const BoxDecoration(color: mainColor),
         ),
-        ListTile(title: Text(MvvmApp.of(context).drawerMap)),
+        ListTile(
+          title: Text(MvvmApp.of(context).drawerMap),
+          onTap: () => Navigator.pushNamed(context, kRouteMap),
+        ),
         ListTile(
           title: Text(MvvmApp.of(context).drawerList),
           onTap: () => Navigator.pushNamed(context, kRouteParking),

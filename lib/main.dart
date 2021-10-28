@@ -15,7 +15,8 @@ class MvvmExampleApp extends StatelessWidget {
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
-        MvvmApp.delegate
+        MvvmApp.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
         Locale.fromSubtags(languageCode: 'zh', countryCode: 'TW'),

@@ -28,6 +28,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "locomotiveRemaining": MessageLookupByLibrary.simpleMessage("機車剩餘車位:"),
         "operatingHours": MessageLookupByLibrary.simpleMessage("營運時間:"),
         "parkingLotInformation": MessageLookupByLibrary.simpleMessage("停車場資訊"),
+        "parkingMap": MessageLookupByLibrary.simpleMessage("停車場地圖資訊"),
         "totalCar": MessageLookupByLibrary.simpleMessage("汽車總車位:"),
         "totalLocomotive": MessageLookupByLibrary.simpleMessage("機車總車位:"),
         "trafficInformation": MessageLookupByLibrary.simpleMessage("交通資訊"),

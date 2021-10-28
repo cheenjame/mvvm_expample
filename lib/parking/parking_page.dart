@@ -203,8 +203,6 @@ class _ParkingState extends State<ParkingPage> {
     if (!parking.isLocationVaild()) {
       return;
     }
-
-    print('XXXX = $parking');
     final lat = double.parse(parking.latitude ?? '');
     final lng = double.parse(parking.longitude ?? '');
     final google = 'comgooglemaps://?daddr=$lat,$lng&directionsmode=d';

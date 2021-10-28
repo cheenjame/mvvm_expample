@@ -28,6 +28,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Holiday charging method"),
         "locomotiveRemaining": MessageLookupByLibrary.simpleMessage(
             "Locomotive remaining parking spaces:"),
+        "parkingMap":
+            MessageLookupByLibrary.simpleMessage("Parking lot map information"),
         "totalCar":
             MessageLookupByLibrary.simpleMessage("Total car parking spaces:"),
         "totalLocomotive": MessageLookupByLibrary.simpleMessage(

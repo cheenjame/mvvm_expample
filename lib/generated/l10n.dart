@@ -159,6 +159,16 @@ class MvvmApp {
       args: [],
     );
   }
+
+  /// `停車場地圖資訊`
+  String get parkingMap {
+    return Intl.message(
+      '停車場地圖資訊',
+      name: 'parkingMap',
+      desc: '側邊欄/停車場地圖資訊',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<MvvmApp> {

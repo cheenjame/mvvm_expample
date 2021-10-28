@@ -64,5 +64,11 @@
       "description": "側邊欄/列表",
       "type": "text",
       "placeholders": {}
+    },
+    "parkingMap": "停車場地圖資訊",
+    "@parkingMap": {
+      "description": "側邊欄/停車場地圖資訊",
+      "type": "text",
+      "placeholders": {}
     }
 }
