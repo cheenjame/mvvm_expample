@@ -72,8 +72,8 @@ class HsinchuCityParking {
         carSurplus = json['汽車剩餘車位'] ?? '',
         locomotiveTotal = json['機車總車位'] ?? '',
         locomotiveSurplus = json['機車剩餘車位'] ?? '',
-        longitude = json['X座標'] ?? '',
-        latitude = json['Y座標'];
+        latitude = json['X座標'] ?? '',
+        longitude = json['Y座標'];
   final String? name;
   final String? address;
   final String? time;
@@ -83,8 +83,13 @@ class HsinchuCityParking {
   final String? carSurplus;
   final String? locomotiveTotal;
   final String? locomotiveSurplus;
-  final String? longitude;
+
+  /// 緯度
   final String? latitude;
+
+  /// 經度
+  final String? longitude;
+
   @override
   String toString() {
     return 'HsinchuCityParking(name = $name , address = $address , time = $time , weekdays = $weekdays , holiday = $holiday , carTotal = $carTotal , carSurplus = $carSurplus , locomotiveTotal = $locomotiveTotal , locomotiveSurplus = $locomotiveSurplus, longitude = $longitude, latitude = $latitude )';
