@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:mvvm_expample/colors.dart';
 import 'package:mvvm_expample/drawer.dart';
 import 'package:mvvm_expample/generated/l10n.dart';
 import 'package:mvvm_expample/map/map_view_model.dart';
 
+/// 停車場資訊地圖頁
 class MapPage extends StatefulWidget {
   MapPage({MapViewModel? viewModel}) : _viewModel = viewModel ?? MapViewModel();
   final MapViewModel _viewModel;
@@ -25,13 +27,18 @@ class _MapState extends State<MapPage> {
     setState(() {
       _marker.clear();
       for (final office in googleOffices) {
-        final marker = Marker(
-            markerId: MarkerId(office.name ?? ''),
-            position: LatLng(double.parse(office.latitude ?? ''),
-                double.parse(office.longitude ?? '')),
-            infoWindow:
-                InfoWindow(title: office.name, snippet: office.address));
-        _marker[office.name ?? ''] = marker;
+        final car = int.parse(office.carSurplus ?? '');
+        if (car != 0) {
+          final marker = Marker(
+              markerId: MarkerId(office.name ?? ''),
+              position: LatLng(double.parse(office.latitude ?? ''),
+                  double.parse(office.longitude ?? '')),
+              infoWindow: InfoWindow(
+                  title: office.name,
+                  snippet:
+                      '${MvvmApp.of(context).carRemaining} : ${office.carSurplus}'));
+          _marker[office.name ?? ''] = marker;
+        }
       }
     });
   }
@@ -54,13 +61,13 @@ class _MapState extends State<MapPage> {
         myLocationEnabled: true,
         onMapCreated: _onMapCreated,
         initialCameraPosition:
-            CameraPosition(target: _initialcameraposition, zoom: 12.0),
+            CameraPosition(target: _initialcameraposition, zoom: 17.0),
         markers: _marker.values.toSet(),
       ),
     );
   }
 
-/// 取得地圖權限
+  /// 取得地圖權限
   Future<void> getLoc() async {
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;

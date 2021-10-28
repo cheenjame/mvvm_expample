@@ -24,7 +24,7 @@ class MvvmExampleApp extends StatelessWidget {
       ],
       onGenerateRoute: onRoute,
       initialRoute: kRouteSplash,
-      theme: ThemeData(primaryColor: mainColor),
+      theme: ThemeData(primaryColor: mainColor,appBarTheme: const AppBarTheme(color: mainColor) ),
     );
   }
 }

@@ -14,7 +14,7 @@ class MvvmDrawer extends StatelessWidget {
         DrawerHeader(
           child: Text(
             MvvmApp.of(context).trafficInformation,
-            style: const TextStyle(fontSize: 20),
+            style: const TextStyle(fontSize: 20, color: Colors.white),
           ),
           decoration: const BoxDecoration(color: mainColor),
         ),
