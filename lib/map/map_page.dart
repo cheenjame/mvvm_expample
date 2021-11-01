@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:mvvm_expample/colors.dart';
 import 'package:mvvm_expample/drawer.dart';
 import 'package:mvvm_expample/generated/l10n.dart';
 import 'package:mvvm_expample/map/map_view_model.dart';
@@ -18,12 +17,16 @@ class _MapState extends State<MapPage> {
   late MapViewModel _viewModel;
   final Map<String, Marker> _marker = {};
   late LocationData _currentPosition;
+
+  /// 地圖控制項
+  GoogleMapController? _mapController;
   Location location = Location();
   LatLng _initialcameraposition =
       const LatLng(24.143587246187604, 120.68893067904283);
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
     final googleOffices = await _viewModel.getParkingMap();
+    _mapController = controller;
     setState(() {
       _marker.clear();
       for (final office in googleOffices) {
@@ -45,9 +48,9 @@ class _MapState extends State<MapPage> {
 
   @override
   void initState() {
+    getLoc();
     super.initState();
     _viewModel = widget._viewModel;
-    getLoc();
   }
 
   @override
@@ -89,6 +92,9 @@ class _MapState extends State<MapPage> {
     _initialcameraposition = LatLng(
         _currentPosition.latitude ?? 0.0, _currentPosition.longitude ?? 0.0);
 
+    if (_currentPosition != null) {
+      _moveCamera(_initialcameraposition, 17);
+    }
     location.onLocationChanged.listen((LocationData currentLocation) {
       setState(() {
         _currentPosition = currentLocation;
@@ -96,5 +102,17 @@ class _MapState extends State<MapPage> {
             _currentPosition.longitude ?? 0.0);
       });
     });
+  }
+
+  /// 移動地圖中心
+  Future<void> _moveCamera(LatLng target, double zoom) async {
+    await _mapController?.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: target,
+          zoom: zoom,
+        ),
+      ),
+    );
   }
 }
