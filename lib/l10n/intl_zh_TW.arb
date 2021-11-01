@@ -70,5 +70,18 @@
       "description": "側邊欄/停車場地圖資訊",
       "type": "text",
       "placeholders": {}
+    },
+    "position": "定位",
+    "@position": {
+      "description": "列表/定位",
+      "type": "text",
+      "placeholders": {}
+    },
+    "distance": "距離",
+    "@distance": {
+      "description": "列表/距離",
+      "type": "text",
+      "placeholders": {}
     }
+    
 }

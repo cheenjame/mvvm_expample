@@ -2,11 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mvvm_expample/colors.dart';
-import 'package:mvvm_expample/drawer.dart';
+import 'package:mvvm_expample/drawer/drawer.dart';
 import 'package:mvvm_expample/generated/l10n.dart';
 import 'package:mvvm_expample/parking/parking_view_model.dart';
 import 'package:mvvm_expample/repository/repository.dart';
 import 'package:mvvm_expample/utils/marker_extension.dart';
+import 'package:mvvm_expample/widget/loadging_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -31,6 +32,7 @@ class _ParkingState extends State<ParkingPage> {
     super.initState();
     _viewModel = widget._viewModel;
     _focus.addListener(() => _viewModel.editing(_focus.hasFocus));
+    _viewModel.getMyLocation();
   }
 
   @override
@@ -49,29 +51,45 @@ class _ParkingState extends State<ParkingPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(MvvmApp.of(context).parkingLotInformation),
+        actions: [
+          InkWell(
+              child: Container(
+                margin: const EdgeInsets.only(right: 10),
+                alignment: Alignment.center,
+                child: Text(MvvmApp.of(context).position),
+              ),
+              onTap: () {
+                final LoadingDialog loadDialog = showMvvmLoadingDialog(context);
+                _viewModel
+                    .getMyLocation()
+                    .whenComplete(() => loadDialog.close(context));
+              })
+        ],
       ),
       drawer: MvvmDrawer(),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: Column(children: [
-          _buildSearchTextField(),
-          Expanded(
-            child: ChangeNotifierProvider.value(
-                value: _viewModel.items,
+        child: MultiProvider(
+          providers: [
+            ChangeNotifierProvider.value(value: _viewModel.items),
+            ChangeNotifierProvider.value(value: _viewModel)
+          ],
+          child: Column(children: [
+            _buildSearchTextField(),
+            Expanded(
                 child: RefreshIndicator(
-                  key: _refreshKey,
-                  child: Consumer<ValueNotifier<List<HsinchuCityParking>>>(
-                    builder: (context, items, child) => ListView.separated(
-                        itemBuilder: (BuildContext context, int index) =>
-                            _buildParkingItem(context, items.value[index]),
-                        separatorBuilder: (context, int index) =>
-                            const Divider(),
-                        itemCount: items.value.length),
-                  ),
-                  onRefresh: _viewModel.getHsinchuParking,
-                )),
-          )
-        ]),
+              key: _refreshKey,
+              child: Consumer<ValueNotifier<List<HsinchuCityParking>>>(
+                builder: (context, items, child) => ListView.separated(
+                    itemBuilder: (BuildContext context, int index) =>
+                        _buildParkingItem(context, items.value[index]),
+                    separatorBuilder: (context, int index) => const Divider(),
+                    itemCount: items.value.length),
+              ),
+              onRefresh: _viewModel.getHsinchuParking,
+            )),
+          ]),
+        ),
       ),
     );
   }
@@ -162,15 +180,27 @@ class _ParkingState extends State<ParkingPage> {
             ),
           ),
           _buildParkingSpace(
-              MvvmApp.of(context).totalCar,
               MvvmApp.of(context).carRemaining,
               parking.carTotal ?? '',
               parking.carSurplus ?? ''),
           _buildParkingSpace(
-              MvvmApp.of(context).totalLocomotive,
               MvvmApp.of(context).locomotiveRemaining,
               parking.locomotiveTotal ?? '',
-              parking.locomotiveSurplus ?? '')
+              parking.locomotiveSurplus ?? ''),
+          Consumer<ParkingViewModel>(
+              builder: (context, model, _) => Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(MvvmApp.of(context).distance),
+                      Container(
+                        margin: const EdgeInsets.only(left: 10),
+                        child: Text(model.getDistance(
+                            double.parse(parking.latitude ?? ''),
+                            double.parse(parking.longitude ?? ''))),
+                      ),
+                      const Text('km')
+                    ],
+                  ))
         ]),
       ),
       onTap: () => _openGoogleMap(parking),
@@ -178,23 +208,13 @@ class _ParkingState extends State<ParkingPage> {
   }
 
   /// 車位資訊
-  Widget _buildParkingSpace(String totalTitle, String numberTitle, String total,
+  Widget _buildParkingSpace( String numberTitle, String total,
       String locomotiveSurplus) {
     if (_viewModel.isTotal(total)) {
       return Container();
     }
     return Row(
-      children: [
-        Expanded(
-            child: Row(
-          children: [Text(totalTitle), Text(total)],
-        )),
-        Expanded(
-          child: Row(
-            children: [Text(numberTitle), Text(locomotiveSurplus)],
-          ),
-        )
-      ],
+      children: [Text(numberTitle), Text(locomotiveSurplus)],
     );
   }
 

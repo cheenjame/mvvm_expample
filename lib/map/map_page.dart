@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:mvvm_expample/drawer.dart';
+import 'package:mvvm_expample/drawer/drawer.dart';
 import 'package:mvvm_expample/generated/l10n.dart';
 import 'package:mvvm_expample/map/map_view_model.dart';
 
@@ -93,7 +93,9 @@ class _MapState extends State<MapPage> {
         _currentPosition.latitude ?? 0.0, _currentPosition.longitude ?? 0.0);
 
     if (_currentPosition != null) {
-      _moveCamera(_initialcameraposition, 17);
+      setState(() {
+        _moveCamera(_initialcameraposition, 17);
+      });
     }
     location.onLocationChanged.listen((LocationData currentLocation) {
       setState(() {

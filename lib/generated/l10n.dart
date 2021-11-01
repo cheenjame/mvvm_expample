@@ -169,6 +169,26 @@ class MvvmApp {
       args: [],
     );
   }
+
+  /// `定位`
+  String get position {
+    return Intl.message(
+      '定位',
+      name: 'position',
+      desc: '列表/定位',
+      args: [],
+    );
+  }
+
+  /// `距離`
+  String get distance {
+    return Intl.message(
+      '距離',
+      name: 'distance',
+      desc: '列表/距離',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<MvvmApp> {
