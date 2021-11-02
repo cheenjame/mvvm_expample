@@ -48,7 +48,7 @@ class _MapState extends State<MapPage> {
 
   @override
   void initState() {
-    getLoc();
+    WidgetsBinding.instance?.addPostFrameCallback((_) => getLoc()); 
     super.initState();
     _viewModel = widget._viewModel;
   }
@@ -92,11 +92,6 @@ class _MapState extends State<MapPage> {
     _initialcameraposition = LatLng(
         _currentPosition.latitude ?? 0.0, _currentPosition.longitude ?? 0.0);
 
-    if (_currentPosition != null) {
-      setState(() {
-        _moveCamera(_initialcameraposition, 17);
-      });
-    }
     location.onLocationChanged.listen((LocationData currentLocation) {
       setState(() {
         _currentPosition = currentLocation;
@@ -104,6 +99,7 @@ class _MapState extends State<MapPage> {
             _currentPosition.longitude ?? 0.0);
       });
     });
+    await _moveCamera(_initialcameraposition, 17);
   }
 
   /// 移動地圖中心

@@ -1,8 +1,8 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:mvvm_expample/repository/repository.dart';
-import "dart:math";
 
 class ParkingViewModel extends ChangeNotifier {
   ParkingViewModel({Repository? repository})

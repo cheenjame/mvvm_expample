@@ -2,6 +2,23 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mvvm_expample/repository/global_json.dart';
 
+enum CityType {
+  /// 台北
+  Taipei,
+
+  /// 新竹
+  Hsinchu,
+
+  /// 台中
+  Taichung,
+
+  /// 台南
+  Tainan,
+
+  /// 宜蘭
+  Yilan
+}
+
 class Repository {
   /// 取得專輯
   Future<Album> fetchAlbum() async {
