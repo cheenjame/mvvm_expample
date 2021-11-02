@@ -37,7 +37,22 @@ class Repository {
     final repsonse = await http.get(Uri.parse(
         'https://odws.hccg.gov.tw/001/Upload/25/OpenData/9059/452/7f02e869-396b-480c-b93f-f62cf67b0f7c.json'));
     if (repsonse.statusCode == 200) {
-      return parseParking(const Utf8Codec().decode(repsonse.bodyBytes));
+      return parseListType(
+              const Utf8Codec().decode(repsonse.bodyBytes), HsinchuCityParking)
+          as List<HsinchuCityParking>;
+    } else {
+      throw Exception('網路異常');
+    }
+  }
+
+  /// 取得台中停車場資訊
+  Future<List<TaichungCityParking>> getTaichungParking() async {
+    final repsonse = await http.get(Uri.parse(
+        'https://datacenter.taichung.gov.tw/swagger/OpenData/56a846ca-bc23-4754-b14a-0170f0541e09'));
+    if (repsonse.statusCode == 200) {
+      return parseListType(
+              const Utf8Codec().decode(repsonse.bodyBytes), TaichungCityParking)
+          as List<TaichungCityParking>;
     } else {
       throw Exception('網路異常');
     }
@@ -62,6 +77,43 @@ class Album {
   @override
   String toString() {
     return 'Album(userId : $userId , id : $id , title: $title)';
+  }
+}
+
+class TaichungCityParking {
+  TaichungCityParking.formJson(dynamic json)
+      : parkingLots = json['ParkingLots']
+            .map((dynamic v) => TaichungAreaParking.fromJson(v))
+            .toList()
+            .cast<TaichungAreaParking>();
+  final List<TaichungAreaParking> parkingLots;
+}
+
+class TaichungAreaParking {
+  TaichungAreaParking.fromJson(dynamic json)
+      : name = json['Position'] ?? '',
+        billing = json['Notes'] ?? '',
+        surplus = json['AvailableCar'] ?? '',
+        longitude = json['X'] ?? 0,
+        latitude = json['Y'] ?? 0;
+
+  /// 停車場名稱
+  final String name;
+
+  /// 計費方式
+  final String billing;
+
+  /// 剩餘車位
+  final int surplus;
+
+  /// 經度
+  final double longitude;
+
+  /// 緯度
+  final double latitude;
+  @override
+  String toString() {
+    return 'TaichungAreaParking (name = $name , billing = $billing , surplus = $surplus , longitude = $longitude , latitude = $latitude )';
   }
 }
 
@@ -111,4 +163,24 @@ class HsinchuCityParking {
   String toString() {
     return 'HsinchuCityParking(name = $name , address = $address , time = $time , weekdays = $weekdays , holiday = $holiday , carTotal = $carTotal , carSurplus = $carSurplus , locomotiveTotal = $locomotiveTotal , locomotiveSurplus = $locomotiveSurplus, longitude = $longitude, latitude = $latitude )';
   }
+}
+
+class AllParking {
+  /// 停車場名稱
+  String name = '';
+
+  /// 營業時間
+  String time = '';
+
+  /// 計費方式
+  String billing = '';
+
+  /// 剩餘車位
+  String surplus = '';
+
+  /// 經度
+  double longitude = 0;
+
+  /// 緯度
+  double latitude = 0;
 }
