@@ -1,10 +1,9 @@
 import 'package:mvvm_expample/repository/repository.dart';
 
-extension HsinchuCityParkingExt on HsinchuCityParking {
+extension TaiwanParkingExt on TaiwanParking {
   /// 確認座標是否正確
   bool isLocationVaild() {
-    final lat = double.parse(latitude ?? '');
-    final log = double.parse(longitude ?? '');
-    return (lat >= -90 && lat <= 90) && (log >= -180 && log <= 180);
+    return (latitude >= -90 && latitude <= 90) &&
+        (longitude >= -180 && longitude <= 180);
   }
 }

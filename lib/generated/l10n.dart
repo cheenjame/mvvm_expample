@@ -189,6 +189,16 @@ class MvvmApp {
       args: [],
     );
   }
+
+  /// `收費 :`
+  String get fee {
+    return Intl.message(
+      '收費 :',
+      name: 'fee',
+      desc: '地圖/收費',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<MvvmApp> {

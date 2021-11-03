@@ -179,17 +179,13 @@ class _ParkingState extends State<ParkingPage> {
               style: const TextStyle(fontSize: 11, color: Colors.red),
             ),
           ),
-          _buildParkingSpace(
-              MvvmApp.of(context).carRemaining,
-              parking.carTotal ?? '',
-              parking.carSurplus ?? ''),
-          _buildParkingSpace(
-              MvvmApp.of(context).locomotiveRemaining,
-              parking.locomotiveTotal ?? '',
-              parking.locomotiveSurplus ?? ''),
+          _buildParkingSpace(MvvmApp.of(context).carRemaining,
+              parking.carTotal ?? '', parking.carSurplus ?? ''),
+          _buildParkingSpace(MvvmApp.of(context).locomotiveRemaining,
+              parking.locomotiveTotal ?? '', parking.locomotiveSurplus ?? ''),
           Consumer<ParkingViewModel>(
               builder: (context, model, _) => Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(MvvmApp.of(context).distance),
                       Container(
@@ -208,8 +204,8 @@ class _ParkingState extends State<ParkingPage> {
   }
 
   /// 車位資訊
-  Widget _buildParkingSpace( String numberTitle, String total,
-      String locomotiveSurplus) {
+  Widget _buildParkingSpace(
+      String numberTitle, String total, String locomotiveSurplus) {
     if (_viewModel.isTotal(total)) {
       return Container();
     }
@@ -220,9 +216,9 @@ class _ParkingState extends State<ParkingPage> {
 
   /// 開啟google 導航
   Future<void> _openGoogleMap(HsinchuCityParking parking) async {
-    if (!parking.isLocationVaild()) {
-      return;
-    }
+    // if (!parking.isLocationVaild()) {
+    //   return;
+    // }
     final lat = double.parse(parking.latitude ?? '');
     final lng = double.parse(parking.longitude ?? '');
     final google = 'comgooglemaps://?daddr=$lat,$lng&directionsmode=d';

@@ -76,5 +76,11 @@
       "description": "列表/距離",
       "type": "text",
       "placeholders": {}
+    },
+    "fee": "Fee :",
+    "@fee": {
+      "description": "地圖/收費",
+      "type": "text",
+      "placeholders": {}
     }
 }

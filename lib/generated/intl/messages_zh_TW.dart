@@ -25,6 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "distance": MessageLookupByLibrary.simpleMessage("距離"),
         "drawerList": MessageLookupByLibrary.simpleMessage("列表"),
         "drawerMap": MessageLookupByLibrary.simpleMessage("地圖"),
+        "fee": MessageLookupByLibrary.simpleMessage("收費 :"),
         "holiday": MessageLookupByLibrary.simpleMessage("假日收費方式"),
         "locomotiveRemaining": MessageLookupByLibrary.simpleMessage("機車剩餘車位:"),
         "operatingHours": MessageLookupByLibrary.simpleMessage("營運時間:"),
