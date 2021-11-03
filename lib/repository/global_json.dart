@@ -19,7 +19,7 @@ List<dynamic> parseListType(String responseBody, dynamic types) {
     case TaichungCityParking:
       return parsed
           .map<TaichungCityParking>(
-              (json) => TaichungCityParking.formJson(json))
+              (json) => TaichungCityParking.fromJson(json))
           .toList();
   }
   return types;

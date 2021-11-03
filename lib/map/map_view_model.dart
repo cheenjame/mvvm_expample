@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:mvvm_expample/repository/repository.dart';
 
 class MapViewModel {
@@ -7,11 +9,11 @@ class MapViewModel {
   final Repository _repository;
 
   /// 取得停車場資訊
-  Future<List<AllParking>> getParkingMap() async {
-    final List<AllParking> allParkingList = [];
+  Future<List<TaiwanParking>> getParkingMap() async {
+    final List<TaiwanParking> allParkingList = [];
     await _repository.getHsinchuParking().then((parking) {
       for (final HsinchuCityParking hsinchu in parking) {
-        final allParking = AllParking();
+        final allParking = TaiwanParking();
         final car = int.parse(hsinchu.carSurplus ?? '');
         if (car > 0) {
           allParking.name = hsinchu.name ?? '';
@@ -27,7 +29,7 @@ class MapViewModel {
     await _repository.getTaichungParking().then((parking) {
       for (final TaichungCityParking taichung in parking) {
         for (final TaichungAreaParking area in taichung.parkingLots) {
-          final allParking = AllParking();
+          final allParking = TaiwanParking();
           if (area.surplus > 0) {
             allParking.name = area.name;
             allParking.billing = area.billing;
@@ -36,6 +38,20 @@ class MapViewModel {
             allParking.longitude = area.longitude;
             allParkingList.add(allParking);
           }
+        }
+      }
+    });
+
+    await _repository.getTaoyuanParking().then((parking) {
+      for (final TaoyuanAreaParking area in parking.parkingList) {
+        final allParking = TaiwanParking();
+        if (int.parse(area.surplus) > 0) {
+          allParking.name = area.name;
+          allParking.billing = area.billing;
+          allParking.surplus = area.surplus;
+          allParking.latitude = area.latitude;
+          allParking.longitude = area.longitude;
+          allParkingList.add(allParking);
         }
       }
     });

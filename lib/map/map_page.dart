@@ -48,7 +48,7 @@ class _MapState extends State<MapPage> {
   }
 
   /// 開啟google 導航
-  Future<void> _openGoogleMap(AllParking parking) async {
+  Future<void> _openGoogleMap(TaiwanParking parking) async {
     // if (!parking.isLocationVaild()) {
     //   return;
     // }

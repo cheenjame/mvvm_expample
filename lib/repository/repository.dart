@@ -34,11 +34,11 @@ class Repository {
 
   /// 取得新竹停車場資訊
   Future<List<HsinchuCityParking>> getHsinchuParking() async {
-    final repsonse = await http.get(Uri.parse(
+    final response = await http.get(Uri.parse(
         'https://odws.hccg.gov.tw/001/Upload/25/OpenData/9059/452/7f02e869-396b-480c-b93f-f62cf67b0f7c.json'));
-    if (repsonse.statusCode == 200) {
+    if (response.statusCode == 200) {
       return parseListType(
-              const Utf8Codec().decode(repsonse.bodyBytes), HsinchuCityParking)
+              const Utf8Codec().decode(response.bodyBytes), HsinchuCityParking)
           as List<HsinchuCityParking>;
     } else {
       throw Exception('網路異常');
@@ -47,12 +47,24 @@ class Repository {
 
   /// 取得台中停車場資訊
   Future<List<TaichungCityParking>> getTaichungParking() async {
-    final repsonse = await http.get(Uri.parse(
+    final response = await http.get(Uri.parse(
         'https://datacenter.taichung.gov.tw/swagger/OpenData/56a846ca-bc23-4754-b14a-0170f0541e09'));
-    if (repsonse.statusCode == 200) {
+    if (response.statusCode == 200) {
       return parseListType(
-              const Utf8Codec().decode(repsonse.bodyBytes), TaichungCityParking)
+              const Utf8Codec().decode(response.bodyBytes), TaichungCityParking)
           as List<TaichungCityParking>;
+    } else {
+      throw Exception('網路異常');
+    }
+  }
+
+  /// 取得桃園停車場資訊
+  Future<TaoyuanCityParking> getTaoyuanParking() async {
+    final response = await http.get(Uri.parse(
+        'https://data.tycg.gov.tw/opendata/datalist/datasetMeta/download?id=f4cc0b12-86ac-40f9-8745-885bddc18f79&rid=0daad6e6-0632-44f5-bd25-5e1de1e9146f'));
+    if (response.statusCode == 200) {
+      return TaoyuanCityParking.fromJson(
+          jsonDecode(utf8.decode(response.body.runes.toList())));
     } else {
       throw Exception('網路異常');
     }
@@ -80,8 +92,9 @@ class Album {
   }
 }
 
+/// 台中市停車場
 class TaichungCityParking {
-  TaichungCityParking.formJson(dynamic json)
+  TaichungCityParking.fromJson(dynamic json)
       : parkingLots = json['ParkingLots']
             .map((dynamic v) => TaichungAreaParking.fromJson(v))
             .toList()
@@ -165,7 +178,48 @@ class HsinchuCityParking {
   }
 }
 
-class AllParking {
+/// 桃園停車場資訊
+class TaoyuanCityParking {
+  TaoyuanCityParking.fromJson(dynamic json)
+      : parkingList = json['parkingLots']
+            .map((dynamic v) => TaoyuanAreaParking.fromJson(v))
+            .toList()
+            .cast<TaoyuanAreaParking>();
+  final List<TaoyuanAreaParking> parkingList;
+}
+
+class TaoyuanAreaParking {
+  TaoyuanAreaParking.fromJson(dynamic json)
+      : name = json['parkName'],
+        billing = json['payGuide'],
+        surplus = json['surplusSpace'],
+        longitude = json['wgsX'],
+        latitude = json['wgsY'];
+
+  /// 停車場名稱
+  final String name;
+
+  /// 計費方式
+  final String billing;
+
+  /// 剩餘車位
+  final String surplus;
+
+  /// 經度
+  final double longitude;
+
+  /// 緯度
+  final double latitude;
+
+  @override
+  @override
+  String toString() {
+    return 'TaoyuanParking(name = $name , billing = $billing , surplus = $surplus , longitude = $longitude , latitude = $latitude)';
+  }
+}
+
+/// 全台停車場
+class TaiwanParking {
   /// 停車場名稱
   String name = '';
 
