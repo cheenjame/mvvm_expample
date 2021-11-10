@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -6,6 +8,7 @@ import 'package:mvvm_expample/generated/l10n.dart';
 import 'package:mvvm_expample/map/map_car_parking_Card.dart';
 import 'package:mvvm_expample/map/map_view_model.dart';
 import 'package:mvvm_expample/repository/repository.dart';
+import 'package:provider/provider.dart';
 
 /// 停車場資訊地圖頁
 class MapPage extends StatefulWidget {
@@ -20,6 +23,9 @@ class _MapState extends State<MapPage> {
   final Map<String, Marker> _marker = {};
   late LocationData _currentPosition;
 
+  /// 當前地圖中間點
+  CameraPosition? _currentMapPosition;
+
   /// 卡片bottom隱藏
   double cardPosition = -100;
 
@@ -29,31 +35,19 @@ class _MapState extends State<MapPage> {
   LatLng _initialcameraposition =
       const LatLng(24.143587246187604, 120.68893067904283);
   TaiwanParking parking = TaiwanParking();
-  Future<void> _onMapCreated(GoogleMapController controller) async {
-    final googleOffices = await _viewModel.getParkingMap();
-    _mapController = controller;
-    setState(() {
-      _marker.clear();
-      for (final office in googleOffices) {
-        final marker = Marker(
-            markerId: MarkerId(office.name),
-            position: LatLng(office.latitude, office.longitude),
-            onTap: () {
-              setState(() {
-                cardPosition = 0;
-                parking = office;
-              });
-            });
-        _marker[office.name] = marker;
-      }
-    });
-  }
 
   @override
   void initState() {
     WidgetsBinding.instance?.addPostFrameCallback((_) => getLoc());
-    super.initState();
     _viewModel = widget._viewModel;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _mapController?.dispose();
+    _viewModel.dispose();
+    super.dispose();
   }
 
   @override
@@ -63,27 +57,36 @@ class _MapState extends State<MapPage> {
           title: Text(MvvmApp.of(context).parkingMap),
         ),
         drawer: MvvmDrawer(),
-        body: Stack(
-          children: [
-            GoogleMap(
-              myLocationEnabled: true,
-              zoomControlsEnabled: false,
-              mapToolbarEnabled: false,
-              onMapCreated: _onMapCreated,
-              initialCameraPosition:
-                  CameraPosition(target: _initialcameraposition, zoom: 17.0),
-              markers: _marker.values.toSet(),
-              onTap: (LatLng latLng) {
-                setState(() {
-                  cardPosition = -1000;
-                });
-              },
-            ),
-            MapCardParkingCard(
-              cardPosition: cardPosition,
-              parking: parking,
-            )
-          ],
+        body: ChangeNotifierProvider.value(
+          value: _viewModel,
+          child: Stack(
+            children: [
+              Consumer<MapViewModel>(
+                  builder: (_, model, child) => GoogleMap(
+                        myLocationEnabled: true,
+                        zoomControlsEnabled: false,
+                        mapToolbarEnabled: false,
+                        onMapCreated: (GoogleMapController controller) {
+                          _mapController = controller;
+                        },
+                        initialCameraPosition: CameraPosition(
+                            target: _initialcameraposition, zoom: 17.0),
+                        markers: _marker.values.toSet(),
+                        onTap: (LatLng latLng) {
+                          setState(() {
+                            cardPosition = -1000;
+                          });
+                        },
+                        onCameraMove: (position) =>
+                            _currentMapPosition = position,
+                        onCameraIdle: _onMapCameraIdle,
+                      )),
+              MapCardParkingCard(
+                cardPosition: cardPosition,
+                parking: parking,
+              )
+            ],
+          ),
         ));
   }
 
@@ -119,7 +122,7 @@ class _MapState extends State<MapPage> {
     await _moveCamera(_initialcameraposition, 17);
   }
 
-  /// 移動地圖中心
+  /// 移動地圖中心點
   Future<void> _moveCamera(LatLng target, double zoom) async {
     await _mapController?.animateCamera(
       CameraUpdate.newCameraPosition(
@@ -129,5 +132,32 @@ class _MapState extends State<MapPage> {
         ),
       ),
     );
+  }
+
+  void _onMapCameraIdle() {
+    final currentMapPosition = _currentMapPosition;
+    if (currentMapPosition == null) {
+      return;
+    }
+    getMarker();
+  }
+
+  Future<void> getMarker() async {
+    final googleOffices = await _viewModel.getParkingMap();
+    setState(() {
+      _marker.clear();
+      for (final office in googleOffices) {
+        final marker = Marker(
+            markerId: MarkerId(office.name),
+            position: LatLng(office.latitude, office.longitude),
+            onTap: () {
+              setState(() {
+                cardPosition = 0;
+                parking = office;
+              });
+            });
+        _marker[office.name] = marker;
+      }
+    });
   }
 }

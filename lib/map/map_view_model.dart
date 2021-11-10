@@ -1,12 +1,17 @@
-import 'dart:convert';
+import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:mvvm_expample/repository/repository.dart';
 
-class MapViewModel {
+class MapViewModel extends ChangeNotifier {
   MapViewModel({Repository? repository})
       : _repository = repository ?? Repository();
 
   final Repository _repository;
+
+  /// 停車場同步監聽
+  StreamSubscription? _syncParkingSubscription;
+
 
   /// 取得停車場資訊
   Future<List<TaiwanParking>> getParkingMap() async {
@@ -56,5 +61,11 @@ class MapViewModel {
       }
     });
     return allParkingList;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _syncParkingSubscription?.cancel();
   }
 }
