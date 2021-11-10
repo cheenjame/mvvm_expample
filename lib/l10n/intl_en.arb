@@ -1,86 +1,92 @@
 {
-  "OperatingHours": "Operating hours",
-  "@OperatingHours": {
+  "operatingHours": "Operating hours:",
+  "@operatingHours": {
     "description": "停車場資訊/營運時間:",
     "type": "text",
     "placeholders": {}
   },
-    "ParkingLotInformation": "Parking lot information",
-    "@ParkingLotInformation": {
-      "description": "停車場資訊/停車場資訊",
-      "type": "text",
-      "placeholders": {}
-    },
-    "weekdays": "How to charge on weekdays",
-    "@weekdays": {
-      "description": "停車場資訊/平日收費方式",
-      "type": "text",
-      "placeholders": {}
-    },
-    "holiday": "Holiday charging method",
-    "@holiday": {
-      "description": "停車場資訊/假日收費方式",
-      "type": "text",
-      "placeholders": {}
-    },
-    "totalCar": "Total car parking spaces:",
-    "@totalCar": {
-      "description": "停車場資訊/汽車總車位:",
-      "type": "text",
-      "placeholders": {}
-    },
-    "carRemaining": "Car remaining parking spaces:",
-    "@carRemaining": {
-      "description": "停車場資訊/汽車剩餘車位:",
-      "type": "text",
-      "placeholders": {}
-    },
-    "totalLocomotive": "Total Locomotive Parking Space:",
-    "@totalLocomotive": {
-      "description": "停車場資訊/機車總車位:",
-      "type": "text",
-      "placeholders": {}
-    },
-    "locomotiveRemaining": "Locomotive remaining parking spaces:",
-    "@locomotiveRemaining": {
-      "description": "停車場資訊/機車剩餘車位:",
-      "type": "text",
-      "placeholders": {}
-    },
-    "trafficInformation": "Traffic Information",
-    "@trafficInformation": {
-      "description": "側邊欄/交通資訊",
-      "type": "text",
-      "placeholders": {}
-    },
-    "drawerList": "List",
-    "@drawerList": {
-      "description": "側邊欄/列表",
-      "type": "text",
-      "placeholders": {}
-    },
-    "parkingMap": "Parking lot map information",
-    "@parkingMap": {
-      "description": "側邊欄/停車場地圖資訊",
-      "type": "text",
-      "placeholders": {}
-    },
-    "position": "Position",
-    "@position": {
-      "description": "列表/定位",
-      "type": "text",
-      "placeholders": {}
-    },
-    "distance": "Distance",
-    "@distance": {
-      "description": "列表/距離",
-      "type": "text",
-      "placeholders": {}
-    },
-    "fee": "Fee :",
-    "@fee": {
-      "description": "地圖/收費",
-      "type": "text",
-      "placeholders": {}
-    }
+  "parkingLotInformation": "Parking lot information",
+  "@parkingLotInformation": {
+    "description": "停車場資訊/停車場資訊",
+    "type": "text",
+    "placeholders": {}
+  },
+  "weekdays": "How to charge on weekdays",
+  "@weekdays": {
+    "description": "停車場資訊/平日收費方式",
+    "type": "text",
+    "placeholders": {}
+  },
+  "holiday": "Holiday charging method",
+  "@holiday": {
+    "description": "停車場資訊/假日收費方式",
+    "type": "text",
+    "placeholders": {}
+  },
+  "totalCar": "Total car parking spaces:",
+  "@totalCar": {
+    "description": "停車場資訊/汽車總車位:",
+    "type": "text",
+    "placeholders": {}
+  },
+  "carRemaining": "Spaces:",
+  "@carRemaining": {
+    "description": "停車場資訊/汽車剩餘車位:",
+    "type": "text",
+    "placeholders": {}
+  },
+  "totalLocomotive": "Total Locomotive Parking Space:",
+  "@totalLocomotive": {
+    "description": "停車場資訊/機車總車位:",
+    "type": "text",
+    "placeholders": {}
+  },
+  "locomotiveRemaining": "Locomotive remaining parking spaces:",
+  "@locomotiveRemaining": {
+    "description": "停車場資訊/機車剩餘車位:",
+    "type": "text",
+    "placeholders": {}
+  },
+  "trafficInformation": "Traffic Information",
+  "@trafficInformation": {
+    "description": "側邊欄/交通資訊",
+    "type": "text",
+    "placeholders": {}
+  },
+  "drawerMap": "Map",
+  "@drawerMap": {
+    "description": "側邊欄/地圖",
+    "type": "text",
+    "placeholders": {}
+  },
+  "drawerList": "List",
+  "@drawerList": {
+    "description": "側邊欄/列表",
+    "type": "text",
+    "placeholders": {}
+  },
+  "parkingMap": "Parking lot map information",
+  "@parkingMap": {
+    "description": "側邊欄/停車場地圖資訊",
+    "type": "text",
+    "placeholders": {}
+  },
+  "position": "Position",
+  "@position": {
+    "description": "列表/定位",
+    "type": "text",
+    "placeholders": {}
+  },
+  "distance": "Distance",
+  "@distance": {
+    "description": "列表/距離",
+    "type": "text",
+    "placeholders": {}
+  },
+  "fee": "Fee :",
+  "@fee": {
+    "description": "地圖/收費",
+    "type": "text",
+    "placeholders": {}
+  }
 }

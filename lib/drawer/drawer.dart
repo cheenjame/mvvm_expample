@@ -5,7 +5,6 @@ import 'package:mvvm_expample/route.dart';
 
 /// 側邊欄
 class MvvmDrawer extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -27,10 +26,6 @@ class MvvmDrawer extends StatelessWidget {
           title: Text(MvvmApp.of(context).drawerList),
           onTap: () => Navigator.pushNamed(context, kRouteParking),
         ),
-        ListTile(
-          title: const Text('練習'),
-          onTap: () => Navigator.pushNamed(context, kRouteSecond),
-        )
       ],
     ));
   }
