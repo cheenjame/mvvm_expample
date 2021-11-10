@@ -6,6 +6,7 @@ import 'package:mvvm_expample/drawer/drawer.dart';
 import 'package:mvvm_expample/generated/l10n.dart';
 import 'package:mvvm_expample/parking/parking_view_model.dart';
 import 'package:mvvm_expample/repository/repository.dart';
+import 'package:mvvm_expample/utils/marker_extension.dart';
 import 'package:mvvm_expample/widget/loadging_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -28,10 +29,10 @@ class _ParkingState extends State<ParkingPage> {
 
   @override
   void initState() {
-    super.initState();
     _viewModel = widget._viewModel;
     _focus.addListener(() => _viewModel.editing(_focus.hasFocus));
     _viewModel.getMyLocation();
+    super.initState();
   }
 
   @override
@@ -61,6 +62,7 @@ class _ParkingState extends State<ParkingPage> {
                 final LoadingDialog loadDialog = showMvvmLoadingDialog(context);
                 _viewModel
                     .getMyLocation()
+                    .then((value) => _refreshKey.currentState?.show())
                     .whenComplete(() => loadDialog.close(context));
               })
         ],
@@ -78,14 +80,14 @@ class _ParkingState extends State<ParkingPage> {
             Expanded(
                 child: RefreshIndicator(
               key: _refreshKey,
-              child: Consumer<ValueNotifier<List<HsinchuCityParking>>>(
+              child: Consumer<ValueNotifier<List<TaiwanParking>>>(
                 builder: (context, items, child) => ListView.separated(
                     itemBuilder: (BuildContext context, int index) =>
                         _buildParkingItem(context, items.value[index]),
                     separatorBuilder: (context, int index) => const Divider(),
                     itemCount: items.value.length),
               ),
-              onRefresh: _viewModel.getHsinchuParking,
+              onRefresh: _viewModel.getParking,
             )),
           ]),
         ),
@@ -142,46 +144,27 @@ class _ParkingState extends State<ParkingPage> {
   void _clearTextField() {
     _controller.clear();
     _viewModel.inputText('');
-    _viewModel.getHsinchuParking();
+    _viewModel.getParking();
   }
 
   /// 停車場資訊內容
-  Widget _buildParkingItem(BuildContext context, HsinchuCityParking parking) {
+  Widget _buildParkingItem(BuildContext context, TaiwanParking parking) {
     return InkWell(
       child: Container(
         margin: const EdgeInsets.only(left: 20),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
-            parking.name ?? '',
+            parking.name,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
-          Row(children: [
-            Text(MvvmApp.of(context).operatingHours),
-            Container(
-              margin: const EdgeInsets.only(left: 10),
-              child: Text(
-                parking.time ?? '',
-                style: const TextStyle(fontSize: 12),
-              ),
-            )
-          ]),
-          Text(MvvmApp.of(context).weekdays),
+          Text(MvvmApp.of(context).fee),
           Text(
-            parking.weekdays ?? '',
-            style: const TextStyle(fontSize: 11, color: Colors.red),
+            parking.billing,
+            style:
+                const TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
           ),
-          Text(MvvmApp.of(context).holiday),
-          Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            child: Text(
-              parking.holiday ?? '',
-              style: const TextStyle(fontSize: 11, color: Colors.red),
-            ),
-          ),
-          _buildParkingSpace(MvvmApp.of(context).carRemaining,
-              parking.carTotal ?? '', parking.carSurplus ?? ''),
-          _buildParkingSpace(MvvmApp.of(context).locomotiveRemaining,
-              parking.locomotiveTotal ?? '', parking.locomotiveSurplus ?? ''),
+          _buildParkingSpace(MvvmApp.of(context).carRemaining, parking.surplus,
+              parking.surplus),
           Consumer<ParkingViewModel>(
               builder: (context, model, _) => Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -189,11 +172,18 @@ class _ParkingState extends State<ParkingPage> {
                       Text(MvvmApp.of(context).distance),
                       Container(
                         margin: const EdgeInsets.only(left: 10),
-                        child: Text(model.getDistance(
-                            double.parse(parking.latitude ?? ''),
-                            double.parse(parking.longitude ?? ''))),
+                        child: Text(model
+                            .getDistance(parking.latitude, parking.longitude)
+                            .toStringAsFixed(1)),
                       ),
-                      const Text('km')
+                      const Text('km'),
+                      Container(
+                        margin: const EdgeInsets.only(left: 10, right: 10),
+                        child: const Icon(
+                          Icons.navigation,
+                          color: Colors.blue,
+                        ),
+                      )
                     ],
                   ))
         ]),
@@ -208,18 +198,28 @@ class _ParkingState extends State<ParkingPage> {
     if (_viewModel.isTotal(total)) {
       return Container();
     }
-    return Row(
-      children: [Text(numberTitle), Text(locomotiveSurplus)],
+    return Container(
+      margin: const EdgeInsets.only(top: 10),
+      child: Row(
+        children: [
+          Text(numberTitle),
+          Text(
+            locomotiveSurplus,
+            style: const TextStyle(
+                color: Colors.green, fontWeight: FontWeight.bold),
+          )
+        ],
+      ),
     );
   }
 
   /// 開啟google 導航
-  Future<void> _openGoogleMap(HsinchuCityParking parking) async {
-    // if (!parking.isLocationVaild()) {
-    //   return;
-    // }
-    final lat = double.parse(parking.latitude ?? '');
-    final lng = double.parse(parking.longitude ?? '');
+  Future<void> _openGoogleMap(TaiwanParking parking) async {
+    if (!parking.isLocationVaild()) {
+      return;
+    }
+    final lat = parking.latitude;
+    final lng = parking.longitude;
     final google = 'comgooglemaps://?daddr=$lat,$lng&directionsmode=d';
     final google1 = Uri.parse('google.navigation:q=$lat,$lng&mode=d');
     final google2 = Uri.parse('geo:0,0?q=$lat,$lng(${parking.name})');

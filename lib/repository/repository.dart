@@ -290,4 +290,7 @@ class TaiwanParking {
 
   /// 緯度
   double latitude = 0;
+
+  /// 距離
+  double distance = 0;
 }

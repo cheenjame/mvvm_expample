@@ -20,10 +20,10 @@ class ParkingViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  final items = ValueNotifier<List<HsinchuCityParking>>([]);
-  Future<List<HsinchuCityParking>> getHsinchuParking() async {
+  final items = ValueNotifier<List<TaiwanParking>>([]);
+  Future<List<TaiwanParking>> getParking() async {
     isLoaded = true;
-    return _repository.getHsinchuParking().then((value) => items.value = value);
+    return _getAllParking().then((value) => items.value = value);
   }
 
   /// 車位是否為0
@@ -32,17 +32,16 @@ class ParkingViewModel extends ChangeNotifier {
     return number == 0;
   }
 
-  Future<List<HsinchuCityParking>> getSearchHsinchuParking(String text) async {
-    return _repository
-        .getHsinchuParking()
-        .then((value) => value.where((element) => element.name!.contains(text)))
+  Future<List<TaiwanParking>> getSearchParking(String text) async {
+    return _getAllParking()
+        .then((value) => value.where((element) => element.name.contains(text)))
         .then((value) => items.value = value.toList());
   }
 
   /// 輸入文本列出最新消息列表
   void inputText(String text) {
     if (text.length >= 2) {
-      getSearchHsinchuParking(text);
+      getSearchParking(text);
     }
   }
 
@@ -74,7 +73,7 @@ class ParkingViewModel extends ChangeNotifier {
   double _rad(double d) => d * pi / 180;
 
   /// 取得停車場距離
-  String getDistance(double parkingLat, double parkingLong) {
+  double getDistance(double parkingLat, double parkingLong) {
     const radius = 6378137.0;
     final radLat1 = _rad(myLat);
     final radLat2 = _rad(parkingLat);
@@ -83,6 +82,65 @@ class ParkingViewModel extends ChangeNotifier {
     final s = 2 *
         asin(sqrt(pow(sin(a / 2), 2) +
             cos(radLat1) * cos(radLat2) * pow(sin(b / 2), 2)));
-    return ((s * radius).roundToDouble() / 1000).toStringAsFixed(1);
+    return (s * radius).roundToDouble() / 1000;
+  }
+
+  /// 取得所有停車場資訊
+  Future<List<TaiwanParking>> _getAllParking() async {
+    final List<TaiwanParking> allParkingList = [];
+    await _repository.getHsinchuParking().then((parking) {
+      for (final HsinchuCityParking hsinchu in parking) {
+        final allParking = TaiwanParking();
+        final car = int.parse(hsinchu.carSurplus ?? '');
+        if (car > 0) {
+          allParking.name = hsinchu.name ?? '';
+          allParking.time = hsinchu.time ?? '';
+          allParking.billing = hsinchu.holiday ?? '';
+          allParking.surplus = hsinchu.carSurplus ?? '';
+          allParking.latitude = double.parse(hsinchu.latitude ?? '');
+          allParking.longitude = double.parse(hsinchu.longitude ?? '');
+          allParking.distance =
+              getDistance(allParking.latitude, allParking.longitude);
+          allParkingList.add(allParking);
+        }
+      }
+    });
+    await _repository.getTaichungParking().then((parking) {
+      for (final TaichungCityParking taichung in parking) {
+        for (final TaichungAreaParking area in taichung.parkingLots) {
+          final allParking = TaiwanParking();
+          if (area.surplus > 0) {
+            allParking.name = area.name;
+            allParking.billing = area.billing;
+            allParking.surplus = area.surplus.toString();
+            allParking.latitude = area.latitude;
+            allParking.longitude = area.longitude;
+            allParking.distance =
+                getDistance(allParking.latitude, allParking.longitude);
+
+            allParkingList.add(allParking);
+          }
+        }
+      }
+    });
+
+    await _repository.getTaoyuanParking().then((parking) {
+      for (final TaoyuanAreaParking area in parking.parkingList) {
+        final allParking = TaiwanParking();
+        if (int.parse(area.surplus) > 0) {
+          allParking.name = area.name;
+          allParking.billing = area.billing;
+          allParking.surplus = area.surplus;
+          allParking.latitude = area.latitude;
+          allParking.longitude = area.longitude;
+          allParking.distance =
+              getDistance(allParking.latitude, allParking.longitude);
+
+          allParkingList.add(allParking);
+        }
+      }
+    });
+    allParkingList.sort((a, b) => a.distance.compareTo(b.distance));
+    return allParkingList;
   }
 }
