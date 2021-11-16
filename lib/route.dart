@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mvvm_expample/map/map_page.dart';
 import 'package:mvvm_expample/parking/parking_page.dart';
-import 'package:mvvm_expample/splash_page.dart';
+import 'splash/splash_page.dart';
 
 enum TransitionType { normal, slideTop, slideLeft }
 

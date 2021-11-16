@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mvvm_expample/route.dart';
-import 'package:mvvm_expample/splash_view_model.dart';
+
+import 'splash_view_model.dart';
 
 class SplashPage extends StatelessWidget {
   SplashPage({SplashViewModel? viewModel})
