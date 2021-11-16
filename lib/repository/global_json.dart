@@ -9,6 +9,15 @@ List<HsinchuCityParking> parseHisnchuParking(String responseBody) {
       .toList();
 }
 
+dynamic parseClassType(String responseBody, dynamic type) {
+  final parsed = jsonDecode(utf8.decode(responseBody.runes.toList()));
+  switch (type) {
+    case TaoyuanCityParking:
+      return TaoyuanCityParking.fromJson(parsed);
+  }
+  return type;
+}
+
 List<dynamic> parseListType(String responseBody, dynamic types) {
   final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
   switch (types) {

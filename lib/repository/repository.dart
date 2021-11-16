@@ -64,14 +64,11 @@ class Repository {
     final response = await http.get(Uri.parse(
         'https://data.tycg.gov.tw/opendata/datalist/datasetMeta/download?id=f4cc0b12-86ac-40f9-8745-885bddc18f79&rid=0daad6e6-0632-44f5-bd25-5e1de1e9146f'));
     if (response.statusCode == 200) {
-      return TaoyuanCityParking.fromJson(
-          jsonDecode(utf8.decode(response.body.runes.toList())));
+      return parseClassType(response.body, TaoyuanCityParking);
     } else {
       throw Exception('網路異常');
     }
   }
-
-
 
   /// 取得停車場資訊
   Future<List<TaiwanParking>> getParkingMap() async {
