@@ -1,4 +1,4 @@
-import 'package:mvvm_expample/repository/repository.dart';
+import 'package:mvvm_expample/repository/parking_repository.dart';
 
 extension TaiwanParkingExt on TaiwanParking {
   /// 確認座標是否正確

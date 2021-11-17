@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:mvvm_expample/repository/repository.dart';
+import 'package:mvvm_expample/repository/parking_repository.dart';
 
 class MapViewModel {
-  MapViewModel({Repository? repository})
-      : _repository = repository ?? Repository();
+  MapViewModel({ParkingRepository? repository})
+      : _repository = repository ?? ParkingRepository();
 
-  final Repository _repository;
+  final ParkingRepository _repository;
 
   /// 取得停車場資訊
   Future<List<TaiwanParking>> getParkingMap() async {

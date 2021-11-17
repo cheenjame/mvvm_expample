@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:mvvm_expample/repository/repository.dart';
+import 'package:mvvm_expample/repository/parking_repository.dart';
 
 List<HsinchuCityParking> parseHisnchuParking(String responseBody) {
   final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
@@ -8,7 +8,6 @@ List<HsinchuCityParking> parseHisnchuParking(String responseBody) {
       .map<HsinchuCityParking>((json) => HsinchuCityParking.fromJson(json))
       .toList();
 }
-
 dynamic parseClassType(String responseBody, dynamic type) {
   final parsed = jsonDecode(utf8.decode(responseBody.runes.toList()));
   switch (type) {
@@ -33,3 +32,5 @@ List<dynamic> parseListType(String responseBody, dynamic types) {
   }
   return types;
 }
+
+

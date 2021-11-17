@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mvvm_expample/generated/l10n.dart';
-import 'package:mvvm_expample/repository/repository.dart';
+import 'package:mvvm_expample/repository/parking_repository.dart';
 import 'package:mvvm_expample/utils/marker_extension.dart';
 import 'package:url_launcher/url_launcher.dart';
 

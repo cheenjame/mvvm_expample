@@ -7,7 +7,7 @@ import 'package:mvvm_expample/drawer/drawer.dart';
 import 'package:mvvm_expample/generated/l10n.dart';
 import 'package:mvvm_expample/map/map_car_parking_Card.dart';
 import 'package:mvvm_expample/map/map_view_model.dart';
-import 'package:mvvm_expample/repository/repository.dart';
+import 'package:mvvm_expample/repository/parking_repository.dart';
 
 /// 停車場資訊地圖頁
 class MapPage extends StatefulWidget {

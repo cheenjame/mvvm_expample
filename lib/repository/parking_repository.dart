@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:mvvm_expample/repository/global_json.dart';
+import 'package:mvvm_expample/repository/base/repository.dart';
 
 enum CityType {
   /// 台北
@@ -20,54 +18,29 @@ enum CityType {
   Yilan
 }
 
-class Repository {
-  /// 取得專輯
-  Future<Album> fetchAlbum() async {
-    final response = await http
-        .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
-
-    if (response.statusCode == 200) {
-      return Album.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to load album');
-    }
-  }
-
+class ParkingRepository {
   /// 取得新竹停車場資訊
-  Future<List<HsinchuCityParking>> getHsinchuParking() async {
-    final response = await http.get(Uri.parse(
-        'https://odws.hccg.gov.tw/001/Upload/25/OpenData/9059/452/7f02e869-396b-480c-b93f-f62cf67b0f7c.json'));
-    if (response.statusCode == 200) {
-      return parseListType(
-              const Utf8Codec().decode(response.bodyBytes), HsinchuCityParking)
-          as List<HsinchuCityParking>;
-    } else {
-      throw Exception('網路異常');
-    }
+  Future<List<HsinchuCityParking>> getHsinchuParking() {
+    final service = Repository<List<HsinchuCityParking>>();
+    return service.getListApi(
+        'https://odws.hccg.gov.tw/001/Upload/25/OpenData/9059/452/7f02e869-396b-480c-b93f-f62cf67b0f7c.json',
+        HsinchuCityParking);
   }
 
   /// 取得台中停車場資訊
   Future<List<TaichungCityParking>> getTaichungParking() async {
-    final response = await http.get(Uri.parse(
-        'https://datacenter.taichung.gov.tw/swagger/OpenData/56a846ca-bc23-4754-b14a-0170f0541e09'));
-    if (response.statusCode == 200) {
-      return parseListType(
-              const Utf8Codec().decode(response.bodyBytes), TaichungCityParking)
-          as List<TaichungCityParking>;
-    } else {
-      throw Exception('網路異常');
-    }
+    final service = Repository<List<TaichungCityParking>>();
+    return service.getListApi(
+        'https://datacenter.taichung.gov.tw/swagger/OpenData/56a846ca-bc23-4754-b14a-0170f0541e09',
+        TaichungCityParking);
   }
 
   /// 取得桃園停車場資訊
-  Future<TaoyuanCityParking> getTaoyuanParking() async {
-    final response = await http.get(Uri.parse(
-        'https://data.tycg.gov.tw/opendata/datalist/datasetMeta/download?id=f4cc0b12-86ac-40f9-8745-885bddc18f79&rid=0daad6e6-0632-44f5-bd25-5e1de1e9146f'));
-    if (response.statusCode == 200) {
-      return parseClassType(response.body, TaoyuanCityParking);
-    } else {
-      throw Exception('網路異常');
-    }
+  Future<TaoyuanCityParking> getTaoyuanParking() {
+    final service = Repository<TaoyuanCityParking>();
+    return service.getClassApi(
+        'https://data.tycg.gov.tw/opendata/datalist/datasetMeta/download?id=f4cc0b12-86ac-40f9-8745-885bddc18f79&rid=0daad6e6-0632-44f5-bd25-5e1de1e9146f',
+        TaoyuanCityParking);
   }
 
   /// 取得停車場資訊
@@ -118,27 +91,6 @@ class Repository {
       }
     });
     return allParkingList;
-  }
-}
-
-/// 專輯json資料
-class Album {
-  Album.fromJson(dynamic json)
-      : userId = json['userId'] ?? 0,
-        id = json['id'] ?? 0,
-        title = json['title'] ?? '';
-
-  /// 使用者id
-  final int? userId;
-
-  /// 專輯id
-  final int? id;
-
-  /// 專輯標題
-  final String? title;
-  @override
-  String toString() {
-    return 'Album(userId : $userId , id : $id , title: $title)';
   }
 }
 

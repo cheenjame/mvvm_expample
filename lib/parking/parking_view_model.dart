@@ -2,12 +2,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:mvvm_expample/repository/repository.dart';
+import 'package:mvvm_expample/repository/parking_repository.dart';
 
 class ParkingViewModel extends ChangeNotifier {
-  ParkingViewModel({Repository? repository})
-      : _repository = repository ?? Repository();
-  final Repository _repository;
+  ParkingViewModel({ParkingRepository? repository})
+      : _repository = repository ?? ParkingRepository();
+  final ParkingRepository _repository;
   bool isLoaded = false;
 
   /// 是否輸入中
