@@ -7,7 +7,7 @@ import 'package:mvvm_expample/generated/l10n.dart';
 import 'package:mvvm_expample/parking/parking_view_model.dart';
 import 'package:mvvm_expample/repository/parking_repository.dart';
 import 'package:mvvm_expample/utils/marker_extension.dart';
-import 'package:mvvm_expample/widget/loading_dialog.dart';
+import 'package:mvvm_expample/widget/loadging_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 

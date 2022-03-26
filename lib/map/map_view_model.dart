@@ -55,6 +55,22 @@ class MapViewModel {
         }
       }
     });
+      await _repository.getTainanCityParking().then((parking) {
+      for (final TainanCityParking tainan in parking) {
+        final allParking = TaiwanParking();
+        if (tainan.surplus > 0) {
+          allParking.name = tainan.name;
+          allParking.billing = tainan.billing;
+          allParking.surplus = tainan.surplus.toString();
+          String lat = tainan.lngAndLat.trim();
+          lat = lat.replaceAll(RegExp(','), '');
+          allParking.latitude = double.parse(lat.trim().substring(0, 9));
+          allParking.longitude = double.parse(lat.trim().substring(9));
+          allParkingList.add(allParking);
+        }
+      }
+    });
+    
     return allParkingList;
   }
 }

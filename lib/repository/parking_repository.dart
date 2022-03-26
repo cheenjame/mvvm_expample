@@ -43,54 +43,11 @@ class ParkingRepository {
         TaoyuanCityParking);
   }
 
-  /// 取得停車場資訊
-  Future<List<TaiwanParking>> getParkingMap() async {
-    final List<TaiwanParking> allParkingList = [];
-    await getHsinchuParking().then((parking) {
-      for (final HsinchuCityParking hsinchu in parking) {
-        final allParking = TaiwanParking();
-        final car = int.parse(hsinchu.carSurplus ?? '');
-        if (car > 0) {
-          allParking.name = hsinchu.name ?? '';
-          allParking.time = hsinchu.time ?? '';
-          allParking.billing = hsinchu.holiday ?? '';
-          allParking.surplus = hsinchu.carSurplus ?? '';
-          allParking.latitude = double.parse(hsinchu.latitude ?? '');
-          allParking.longitude = double.parse(hsinchu.longitude ?? '');
-          allParkingList.add(allParking);
-        }
-      }
-    });
-    await getTaichungParking().then((parking) {
-      for (final TaichungCityParking taichung in parking) {
-        for (final TaichungAreaParking area in taichung.parkingLots) {
-          final allParking = TaiwanParking();
-          if (area.surplus > 0) {
-            allParking.name = area.name;
-            allParking.billing = area.billing;
-            allParking.surplus = area.surplus.toString();
-            allParking.latitude = area.latitude;
-            allParking.longitude = area.longitude;
-            allParkingList.add(allParking);
-          }
-        }
-      }
-    });
-
-    await getTaoyuanParking().then((parking) {
-      for (final TaoyuanAreaParking area in parking.parkingList) {
-        final allParking = TaiwanParking();
-        if (int.parse(area.surplus) > 0) {
-          allParking.name = area.name;
-          allParking.billing = area.billing;
-          allParking.surplus = area.surplus;
-          allParking.latitude = area.latitude;
-          allParking.longitude = area.longitude;
-          allParkingList.add(allParking);
-        }
-      }
-    });
-    return allParkingList;
+  /// 取得台南停車場資訊
+  Future<List<TainanCityParking>> getTainanCityParking() {
+    final service = Repository<List<TainanCityParking>>();
+    return service.getListApi(
+        'https://parkweb.tainan.gov.tw/api/parking.php', TainanCityParking);
   }
 }
 
@@ -214,9 +171,34 @@ class TaoyuanAreaParking {
   final double latitude;
 
   @override
-  @override
   String toString() {
     return 'TaoyuanParking(name = $name , billing = $billing , surplus = $surplus , longitude = $longitude , latitude = $latitude)';
+  }
+}
+
+/// 台南停車場
+class TainanCityParking {
+  TainanCityParking.fromJson(dynamic json)
+      : name = json['name'],
+        billing = json['chargeFee'],
+        surplus = json['car'],
+        lngAndLat = json['lnglat'];
+
+  /// 停車場名稱
+  final String name;
+
+  /// 計費方式
+  final String billing;
+
+  /// 剩餘車位
+  final int surplus;
+
+  /// 經緯度
+  final String lngAndLat;
+
+  @override
+  String toString() {
+    return 'TainanCityParking(name = $name , billing = $billing , surplus = $surplus , lngAndLat = $lngAndLat )';
   }
 }
 

@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mvvm_expample/repository/parking_repository.dart';
 import 'package:mvvm_expample/utils/location.dart';
 
-class ParkingViewModel with ChangeNotifier ,LocationSetting {
+class ParkingViewModel with ChangeNotifier, LocationSetting {
   ParkingViewModel({ParkingRepository? repository})
       : _repository = repository ?? ParkingRepository();
   final ParkingRepository _repository;
@@ -133,6 +133,24 @@ class ParkingViewModel with ChangeNotifier ,LocationSetting {
           allParking.surplus = area.surplus;
           allParking.latitude = area.latitude;
           allParking.longitude = area.longitude;
+          allParking.distance =
+              getDistance(allParking.latitude, allParking.longitude);
+
+          allParkingList.add(allParking);
+        }
+      }
+    });
+    await _repository.getTainanCityParking().then((parking) {
+      for (final TainanCityParking tainan in parking) {
+        final allParking = TaiwanParking();
+        if (tainan.surplus > 0) {
+          allParking.name = tainan.name;
+          allParking.billing = tainan.billing;
+          allParking.surplus = tainan.surplus.toString();
+          String lat = tainan.lngAndLat.trim();
+          lat = lat.replaceAll(RegExp(','), '');
+          allParking.latitude = double.parse(lat.trim().substring(0, 9));
+          allParking.longitude = double.parse(lat.trim().substring(9));
           allParking.distance =
               getDistance(allParking.latitude, allParking.longitude);
 

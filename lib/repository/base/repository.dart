@@ -50,6 +50,10 @@ class Repository<T> {
             .map<TaichungCityParking>(
                 (json) => TaichungCityParking.fromJson(json))
             .toList();
+      case TainanCityParking:
+        return parsed
+            .map<TainanCityParking>((json) => TainanCityParking.fromJson(json))
+            .toList();
     }
     return types;
   }
