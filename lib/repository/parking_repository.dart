@@ -1,23 +1,5 @@
 import 'dart:async';
 import 'package:mvvm_expample/repository/base/repository.dart';
-
-enum CityType {
-  /// 台北
-  Taipei,
-
-  /// 新竹
-  Hsinchu,
-
-  /// 台中
-  Taichung,
-
-  /// 台南
-  Tainan,
-
-  /// 宜蘭
-  Yilan
-}
-
 class ParkingRepository {
   /// 取得新竹停車場資訊
   Future<List<HsinchuCityParking>> getHsinchuParking() {
