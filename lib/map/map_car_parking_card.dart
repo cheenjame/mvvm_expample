@@ -104,7 +104,7 @@ class _MapCardParkingCardState extends State<MapCardParkingCard> {
 
   /// 開啟google 導航
   Future<void> _openGoogleMap(TaiwanParking parking) async {
-    if (!parking.isLocationVaild()) {
+    if (!parking.isLocationValid()) {
       return;
     }
     final lat = parking.latitude;

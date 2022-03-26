@@ -1,10 +1,11 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 import 'package:mvvm_expample/repository/parking_repository.dart';
+import 'package:mvvm_expample/utils/location.dart';
 
-class ParkingViewModel extends ChangeNotifier {
+class ParkingViewModel with ChangeNotifier ,LocationSetting {
   ParkingViewModel({ParkingRepository? repository})
       : _repository = repository ?? ParkingRepository();
   final ParkingRepository _repository;
@@ -46,8 +47,8 @@ class ParkingViewModel extends ChangeNotifier {
   }
 
   /// 判斷輸入框是否在編輯中
-  void editing(bool hasFoucs) {
-    if (hasFoucs) {
+  void editing(bool hasFocus) {
+    if (hasFocus) {
       isEditing = true;
     } else {
       isEditing = false;
@@ -59,15 +60,14 @@ class ParkingViewModel extends ChangeNotifier {
 
   /// 取得定位
   Future<LatLng> getMyLocation() async {
-    final location = Location();
-    final currentPosition = await location.getLocation();
-    final _cameraposition = LatLng(
-        currentPosition.latitude ?? 24.143587246187604,
-        currentPosition.longitude ?? 120.68893067904283);
-    myLat = _cameraposition.latitude;
-    myLong = _cameraposition.longitude;
+    final currentPosition = await myPosition();
+    final _cameraPosition = LatLng(
+        currentPosition?.latitude ?? 24.143587246187604,
+        currentPosition?.longitude ?? 120.68893067904283);
+    myLat = _cameraPosition.latitude;
+    myLong = _cameraPosition.longitude;
     notifyListeners();
-    return _cameraposition;
+    return _cameraPosition;
   }
 
   double _rad(double d) => d * pi / 180;

@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 import 'package:mvvm_expample/drawer/drawer.dart';
 import 'package:mvvm_expample/generated/l10n.dart';
 import 'package:mvvm_expample/map/map_car_parking_Card.dart';
 import 'package:mvvm_expample/map/map_view_model.dart';
 import 'package:mvvm_expample/repository/parking_repository.dart';
+import 'package:mvvm_expample/utils/location.dart';
 
 /// 停車場資訊地圖頁
 class MapPage extends StatefulWidget {
@@ -17,10 +17,9 @@ class MapPage extends StatefulWidget {
   _MapState createState() => _MapState();
 }
 
-class _MapState extends State<MapPage> {
+class _MapState extends State<MapPage> with LocationSetting {
   late MapViewModel _viewModel;
   final Map<String, Marker> _marker = {};
-  late LocationData _currentPosition;
 
   /// 當前地圖中間點
   CameraPosition? _currentMapPosition;
@@ -30,8 +29,7 @@ class _MapState extends State<MapPage> {
 
   /// 地圖控制項
   GoogleMapController? _mapController;
-  Location location = Location();
-  LatLng _initialcameraposition =
+  final _initialCameraPosition =
       const LatLng(24.143587246187604, 120.68893067904283);
   TaiwanParking parking = TaiwanParking();
   late Timer timer;
@@ -74,7 +72,7 @@ class _MapState extends State<MapPage> {
               _mapController = controller;
             },
             initialCameraPosition:
-                CameraPosition(target: _initialcameraposition, zoom: 17.0),
+                CameraPosition(target: _initialCameraPosition, zoom: 17.0),
             markers: _marker.values.toSet(),
             onTap: (LatLng latLng) {
               setState(() {
@@ -95,34 +93,10 @@ class _MapState extends State<MapPage> {
 
   /// 取得地圖權限
   Future<void> getLoc() async {
-    bool _serviceEnabled;
-    PermissionStatus _permissionGranted;
-    _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
-      if (!_serviceEnabled) {
-        return;
-      }
-    }
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        return;
-      }
-    }
-    _currentPosition = await location.getLocation();
-    _initialcameraposition = LatLng(
-        _currentPosition.latitude ?? 0.0, _currentPosition.longitude ?? 0.0);
-
-    location.onLocationChanged.listen((LocationData currentLocation) {
-      setState(() {
-        _currentPosition = currentLocation;
-        _initialcameraposition = LatLng(_currentPosition.latitude ?? 0.0,
-            _currentPosition.longitude ?? 0.0);
-      });
-    });
-    await _moveCamera(_initialcameraposition, 17);
+    final _currentPosition = await myPosition();
+    final latLng = LatLng(
+        _currentPosition?.latitude ?? 0.0, _currentPosition?.longitude ?? 0.0);
+    await _moveCamera(latLng, 17);
   }
 
   /// 移動地圖中心點
