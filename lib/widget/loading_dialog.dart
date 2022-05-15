@@ -5,7 +5,7 @@ import 'package:mvvm_expample/colors.dart';
 LoadingDialog showMvvmLoadingDialog(BuildContext context) {
   const dialog = LoadingDialog();
   showNonDismissDialog(context, dialog);
-  return dialog;
+  return dialog; 
 }
 
 /// 自訂轉圈圈提示框

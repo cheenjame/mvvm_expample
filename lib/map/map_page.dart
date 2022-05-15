@@ -42,7 +42,7 @@ class _MapState extends State<MapPage> with LocationSetting {
 
   @override
   void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((_) => getLoc());
+    WidgetsBinding.instance.addPostFrameCallback((_) => getLoc());
     _viewModel = widget._viewModel;
     refreshParking();
     super.initState();

@@ -13,7 +13,7 @@ class SplashPage extends StatelessWidget {
         future: _viewModel.getTime(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            WidgetsBinding.instance?.addPostFrameCallback((_) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
               Navigator.popAndPushNamed(context, kRouteParking);
             });
           }
