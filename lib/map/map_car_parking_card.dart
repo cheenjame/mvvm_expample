@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mvvm_expample/generated/l10n.dart';
 import 'package:mvvm_expample/repository/parking_repository.dart';
 import 'package:mvvm_expample/utils/marker_extension.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 /// 地圖停車場卡片資訊
 class MapCardParkingCard extends StatefulWidget {
@@ -115,16 +115,16 @@ class _MapCardParkingCardState extends State<MapCardParkingCard> {
     final google3 =
         'https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=driving&dir_action=navigate';
     final apple = 'https://maps.apple.com/?daddr=$lat,$lng&dirflg=d';
-    if (Platform.isIOS && await canLaunch(google)) {
-      await launch(google);
-    } else if (Platform.isIOS && await canLaunch(apple)) {
-      await launch(apple);
-    } else if (await canLaunch(google1.toString())) {
-      await launch(google1.toString());
-    } else if (await canLaunch(google2.toString())) {
-      await launch(google2.toString());
-    } else if (await canLaunch(google3)) {
-      await launch(google3);
+    if (Platform.isIOS && await launchUrlString(google)) {
+      await launchUrlString(google);
+    } else if (Platform.isIOS && await launchUrlString(apple)) {
+      await launchUrlString(apple);
+    } else if (await launchUrlString(google1.toString())) {
+      await launchUrlString(google1.toString());
+    } else if (await launchUrlString(google2.toString())) {
+      await launchUrlString(google2.toString());
+    } else if (await launchUrlString(google3)) {
+      await launchUrlString(google3);
     }
   }
 }

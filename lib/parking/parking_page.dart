@@ -9,7 +9,7 @@ import 'package:mvvm_expample/repository/parking_repository.dart';
 import 'package:mvvm_expample/utils/marker_extension.dart';
 import 'package:mvvm_expample/widget/loading_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 /// 停車場資訊列表頁
 class ParkingPage extends StatefulWidget {
@@ -31,7 +31,15 @@ class _ParkingState extends State<ParkingPage> {
   void initState() {
     _viewModel = widget._viewModel;
     _focus.addListener(() => _viewModel.editing(_focus.hasFocus));
-    _viewModel.getMyLocation();
+    if (!_viewModel.isLoaded) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final LoadingDialog loadDialog = showMvvmLoadingDialog(context);
+        _viewModel
+            .getMyLocation()
+            .then((value) => _refreshKey.currentState?.show())
+            .whenComplete(() => loadDialog.close(context));
+      });
+    }
     super.initState();
   }
 
@@ -43,11 +51,6 @@ class _ParkingState extends State<ParkingPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_viewModel.isLoaded) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _refreshKey.currentState?.show();
-      });
-    }
     return Scaffold(
       appBar: AppBar(
         title: Text(MvvmApp.of(context).parkingLotInformation),
@@ -226,16 +229,16 @@ class _ParkingState extends State<ParkingPage> {
     final google3 =
         'https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=driving&dir_action=navigate';
     final apple = 'https://maps.apple.com/?daddr=$lat,$lng&dirflg=d';
-    if (Platform.isIOS && await canLaunch(google)) {
-      await launch(google);
-    } else if (Platform.isIOS && await canLaunch(apple)) {
-      await launch(apple);
-    } else if (await canLaunch(google1.toString())) {
-      await launch(google1.toString());
-    } else if (await canLaunch(google2.toString())) {
-      await launch(google2.toString());
-    } else if (await canLaunch(google3)) {
-      await launch(google3);
+    if (Platform.isIOS && await launchUrlString(google)) {
+      await launchUrlString(google);
+    } else if (Platform.isIOS && await launchUrlString(apple)) {
+      await launchUrlString(apple);
+    } else if (await launchUrlString(google1.toString())) {
+      await launchUrlString(google1.toString());
+    } else if (await launchUrlString(google2.toString())) {
+      await launchUrlString(google2.toString());
+    } else if (await launchUrlString(google3)) {
+      await launchUrlString(google3);
     }
   }
 }
